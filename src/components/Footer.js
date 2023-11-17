@@ -18,40 +18,56 @@ const Footer = () => {
       >
         <div class="row mt-3">
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-            <h6 class="text-uppercase font-weight-bold">BitMarket</h6>
+            <h3
+              style={{ color: "skyblue" }}
+              class="text-uppercase font-weight-bold"
+            >
+              Virtual Currency Library System
+            </h3>
             <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" />
             <p>
-              BitMarket is a cryptocurrency price-tracking website that allows
-              you to monitor the price of any cryptocurrency with accurate data
-              and real-time updates.
+              VCL is a digital currency price-tracking website that allows you
+              to monitor the price of any cryptocurrency with accurate data and
+              real-time updates.
             </p>
           </div>
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <h6 class="text-uppercase font-weight-bold">
+            <h3
+              style={{ marginTop: "20px", color: "skyblue" }}
+              class="text-uppercase font-weight-bold"
+            >
               Products{" "}
               {
                 <sub>
                   <span style={{ color: "Green" }}>( UpComing ) </span>
                 </sub>
               }
-            </h6>
+            </h3>
             <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" />
             <p>
-              <a href="#!">LogIn</a>
+              <a style={{ textDecoration: "underline" }} href="#!">
+                Watchlist
+              </a>
             </p>
             <p>
-              <a href="#!">Watchlist</a>
-            </p>
-            <p>
-              <a href="#!">More Coins</a>
+              <a style={{ textDecoration: "underline" }} href="#!">
+                More Coins
+              </a>
             </p>{" "}
             <p>
-              <a href="#!">Help</a>
+              <a style={{ textDecoration: "underline" }} href="#!">
+                Help
+              </a>
             </p>
           </div>
 
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-            <h6 class="text-uppercase font-weight-bold">Contact</h6>
+            <h3
+              style={{ marginTop: "15px", color: "skyblue" }}
+              class="text-uppercase font-weight-bold"
+            >
+              Contact
+            </h3>
             <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" />
             <p>
               <i class="fas fa-home mr-3 fa fa-location"></i> Delhi Technical
@@ -62,21 +78,24 @@ const Footer = () => {
             </p> */}
             <ButtonMailto
               label={<i class="fa fa-envelope mr-3 pb-3"> Mail Me</i>}
-              mailto="mailto:BitMarket.india@gmail.com"
+              mailto="mailto:yashmalhotra330@gmail.com"
             />
 
             <p>
-              <i class="fa fa-phone mr-3 "></i> + 91 8800662900
+              <i class="fa fa-phone mr-3 "></i> + 91 987199898
             </p>
             <p>
-              <i class="fa fa-phone mr-3"></i> + 91 9528105867
+              <i class="fa fa-phone mr-3"></i> + 91 7017631110
             </p>
           </div>
 
           <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-            <h6 class="text-uppercase font-weight-bold pb-3">
+            <h3
+              style={{ color: "skyblue", marginTop: "15px" }}
+              class="text-uppercase font-weight-bold pb-3"
+            >
               Connect With Us{" "}
-            </h6>
+            </h3>
             <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" />
 
             <a
@@ -102,8 +121,7 @@ const Footer = () => {
       </div>
 
       <div class="footer-copyright text-center py-3">
-        © 2021 Copyright:
-        <a href="https://bitmarket.netlify.com"> BitMarket</a>
+        © 2023 Copyright: Virtual Currency Library System
       </div>
     </footer>
   );
