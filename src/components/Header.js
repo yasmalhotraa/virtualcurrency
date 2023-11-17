@@ -39,14 +39,17 @@ function Header() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="transparent" position="static">
+      <AppBar color="blue" position="fixed">
         <Container>
           <Toolbar>
             <Typography
               onClick={() => history.push(`/`)}
               className={classes.title}
             >
-              <img style={{ width: "150px" }} src="../capture.PNG" />
+              <img
+                style={{ width: "150px", marginTop: "10px" }}
+                src="../capture.PNG"
+              />
             </Typography>
 
             <Select
