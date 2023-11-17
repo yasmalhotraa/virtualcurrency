@@ -46,7 +46,7 @@ function Banner() {
               fontFamily: "Montserrat",
             }}
           >
-            BitMarket
+            Virtual Currency Library System
           </Typography>
           <Typography
             variant="subtitle2"
@@ -56,7 +56,7 @@ function Banner() {
               fontFamily: "Montserrat",
             }}
           >
-            Get all the Info regarding your favorite Crypto Currency
+            Get all the Info regarding your favorite Virtual Currency
           </Typography>
         </div>
         <Carousel />
