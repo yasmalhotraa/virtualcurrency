@@ -2,7 +2,7 @@
   "name": "virtual",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://<yasmalhotraa>.github.io/<virtualcurrency>",
+  "homepage": "https://yasmalhotraa.github.io/virtualcurrency",
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/lab": "^4.0.0-alpha.60",
@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^1.6.2",
     "buffer": "^6.0.3",
+    "caniuse-lite": "^1.0.30001666",
     "chart.js": "^3.6.0",
     "react": "^17.0.2",
     "react-alice-carousel": "^2.5.1",
