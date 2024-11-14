@@ -20,8 +20,12 @@ const CoinPage = () => {
   const { currency, symbol } = CryptoState();
   // const [loading, setloading] = useState(false);
   const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(id));
-    setCoin(data);
+    try {
+      const { data } = await axios.get(SingleCoin(id));
+      setCoin(data);
+    } catch (error) {
+      console.error("Error fetching coin data:", error);
+    }
   };
   useEffect(() => {
     fetchCoin();
