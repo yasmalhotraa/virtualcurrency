@@ -4,7 +4,6 @@ import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-
 import CoinPage from "./Pages/CoinPage";
 import Homepage from "./Pages/Homepage";
 
