@@ -16,8 +16,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { useHistory, useParams } from "react-router";
-import { CoinList, SingleCoin } from "../configration/api";
+import { useHistory } from "react-router";
+import { CoinList } from "../configration/api";
 import { CryptoState } from "../Context";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import Pagination from "@material-ui/lab/Pagination";
@@ -54,11 +54,8 @@ const CoinsTable = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const { currency, symbol } = CryptoState();
-  const { id } = useParams();
-  const [coin, setCoin] = useState();
-
-  const classes = useStyles();
   const history = useHistory();
+  const classes = useStyles();
 
   const darkTheme = createTheme({
     palette: {
@@ -69,30 +66,18 @@ const CoinsTable = () => {
     },
   });
 
-  const fetchCoin = useCallback(async () => {
-    try {
-      const { data } = await axios.get(SingleCoin(id));
-      setCoin(data);
-    } catch (error) {
-      console.error("Error fetching coin:", error.message);
-    }
-  }, [id]);
-
+  // Fetch coins
   const fetchCoins = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await axios.get(CoinList(currency));
       setCoins(data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching coins:", error.message);
+    } finally {
       setLoading(false);
     }
   }, [currency]);
-
-  useEffect(() => {
-    fetchCoin();
-  }, [fetchCoin]);
 
   useEffect(() => {
     fetchCoins();
@@ -144,14 +129,14 @@ const CoinsTable = () => {
               </TableHead>
               <TableBody>
                 {filteredCoins
-                  .slice((page - 1) * 30, (page - 1) * 30 + 30)
+                  .slice((page - 1) * 30, page * 30) // Pagination logic
                   .map((row) => {
                     const profit = row.price_change_percentage_24h > 0;
                     return (
                       <TableRow
                         onClick={() => history.push(`/coin/${row.id}`)}
                         className={classes.row}
-                        key={row.name}
+                        key={row.id}
                       >
                         <TableCell align="center">
                           {row.market_cap_rank}
@@ -207,7 +192,7 @@ const CoinsTable = () => {
           )}
         </TableContainer>
         <Pagination
-          count={Math.ceil(filteredCoins.length / 30)}
+          count={Math.ceil(filteredCoins.length / 30)} // Adjust pagination based on filtered coins
           style={{
             padding: 20,
             width: "100%",
@@ -217,7 +202,7 @@ const CoinsTable = () => {
           classes={{ ul: classes.pagination }}
           onChange={(_, value) => {
             setPage(value);
-            window.scroll(0, 450);
+            window.scroll(0, 450); // Scroll to the top of the page when changing page
           }}
         />
       </Container>

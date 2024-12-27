@@ -39,7 +39,7 @@ function Header() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="blue" position="fixed">
+      <AppBar color="inherit" position="fixed">
         <Container>
           <Toolbar>
             <Typography
