@@ -33,6 +33,13 @@ const Carousel = () => {
       cursor: "pointer",
       textTransform: "uppercase",
       color: "white",
+      "& img": {
+        height: 80, // Default height
+        marginBottom: 10,
+        [theme.breakpoints.down("550")]: {
+          height: 50, // Adjusted height for max-height 550px
+        },
+      },
     },
   }));
 

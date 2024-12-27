@@ -22,7 +22,7 @@ import { CryptoState } from "../Context";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import Pagination from "@material-ui/lab/Pagination";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   row: {
     backgroundColor: "#16171a",
     cursor: "pointer",
@@ -41,12 +41,15 @@ const useStyles = makeStyles({
     margin: 18,
     fontFamily: "Montserrat",
     fontWeight: "bold",
+    [theme.breakpoints.down("550")]: {
+      fontSize: "25px", // Font size for max-width 550px
+    },
   },
   textField: {
     marginBottom: 22,
     width: "100%",
   },
-});
+}));
 
 const CoinsTable = () => {
   const [coins, setCoins] = useState([]);

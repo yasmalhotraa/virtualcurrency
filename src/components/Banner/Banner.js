@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     paddingTop: 25,
     justifyContent: "space-around",
+    [theme.breakpoints.down("550")]: {
+      height: 300, // Example adjustment
+      paddingTop: 15,
+    },
   },
   tagline: {
     display: "flex",
@@ -22,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     textAlign: "center",
+    "& h2": {
+      fontSize: "4rem", // Default size for larger screens
+      [theme.breakpoints.down("550")]: {
+        fontSize: "35px", // Font size for max-width 550px
+      },
+    },
   },
   carousel: {
     height: "50%",
