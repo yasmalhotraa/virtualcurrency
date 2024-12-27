@@ -12,6 +12,7 @@ import { Line } from "react-chartjs-2";
 const CoinInfo = ({ coin }) => {
   const [historicData, setHistoricData] = useState();
   const [days, setDays] = useState(1);
+  const [error, setError] = useState(false);
 
   const { currency } = CryptoState();
 
@@ -36,13 +37,23 @@ const CoinInfo = ({ coin }) => {
   const classes = useStyles();
 
   const fetchHistoricData = async () => {
-    const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
-    setHistoricData(data.prices);
+    try {
+      setError(false);
+      const { data } = await axios.get(
+        HistoricalChart(coin.id, days, currency)
+      );
+      setHistoricData(data.prices);
+    } catch (error) {
+      setError(true);
+      console.error("Error fetching historical data:", error.message);
+    }
   };
-  console.log(coin);
+
   useEffect(() => {
-    fetchHistoricData();
-  }, [days]);
+    if (coin) {
+      fetchHistoricData();
+    }
+  }, [days, coin]);
 
   const darkTheme = createTheme({
     palette: {
@@ -53,12 +64,20 @@ const CoinInfo = ({ coin }) => {
     },
   });
 
+  if (!coin) {
+    return <div>Coin data is not available.</div>;
+  }
+
+  if (error) {
+    return <div>Error loading data. Please try again later.</div>;
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
         {!historicData ? (
           <CircularProgress
-            style={{ color: "gradient[0]" }}
+            style={{ color: "skyblue" }}
             size={250}
             thickness={1}
           />
@@ -76,16 +95,14 @@ const CoinInfo = ({ coin }) => {
                   return days === 1 ? time : date.toLocaleDateString();
                 }),
                 datasets: [
-                  //  {data:historicData.map((coin)=>coin[1])},
                   {
                     data: historicData.map((coin) => coin[1]),
-                    label: `Price ( Past ${days} Days ) in ${currency}`,
+                    label: `Price (Past ${days} Days) in ${currency}`,
                     borderColor: "skyblue",
                   },
                 ],
               }}
               options={{
-                // to remove circles in chart
                 elements: {
                   point: {
                     radius: 1,

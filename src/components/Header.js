@@ -49,6 +49,7 @@ function Header() {
               <img
                 style={{ width: "150px", marginTop: "10px" }}
                 src="../capture.PNG"
+                alt="capture"
               />
             </Typography>
 

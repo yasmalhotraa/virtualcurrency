@@ -15,53 +15,51 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useHistory, useParams } from "react-router";
-import { CoinList } from "../configration/api";
+import { CoinList, SingleCoin } from "../configration/api";
 import { CryptoState } from "../Context";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import Pagination from "@material-ui/lab/Pagination";
-// import AboutUs from "./AboutUs";
-// import Footer from "./Footer";
-import { SingleCoin } from "../configration/api";
-import CoinTable2 from "./CoinTable2";
-import { useSortBy } from "react-table";
+
+const useStyles = makeStyles({
+  row: {
+    backgroundColor: "#16171a",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#131111",
+    },
+    fontFamily: "Montserrat",
+  },
+  pagination: {
+    "& .MuiPaginationItem-root": {
+      color: "skyblue",
+    },
+  },
+  title: {
+    color: "skyblue",
+    margin: 18,
+    fontFamily: "Montserrat",
+    fontWeight: "bold",
+  },
+  textField: {
+    marginBottom: 22,
+    width: "100%",
+  },
+});
 
 const CoinsTable = () => {
   const [coins, setCoins] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const { currency, symbol } = CryptoState();
   const { id } = useParams();
   const [coin, setCoin] = useState();
-  const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(id));
-    setCoin(data);
-  };
-  useEffect(() => {
-    fetchCoin();
-  }, []);
 
-  const useStyles = makeStyles({
-    row: {
-      backgroundColor: "#16171a",
-      cursor: "pointer",
-      "&:hover": {
-        backgroundColor: "#131111",
-      },
-      fontFamily: "Montserrat",
-    },
-    pagination: {
-      "& .MuiPaginationItem-root": {
-        //from documentation
-        color: "skyblue",
-      },
-    },
-  });
   const classes = useStyles();
-
   const history = useHistory();
+
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -71,39 +69,53 @@ const CoinsTable = () => {
     },
   });
 
-  const fetchCoins = async () => {
-    setloading(true);
-    const { data } = await axios.get(CoinList(currency));
-    console.log(data);
-    setCoins(data);
-    setloading(false);
-  };
-  useEffect(() => {
-    fetchCoins();
+  const fetchCoin = useCallback(async () => {
+    try {
+      const { data } = await axios.get(SingleCoin(id));
+      setCoin(data);
+    } catch (error) {
+      console.error("Error fetching coin:", error.message);
+    }
+  }, [id]);
+
+  const fetchCoins = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(CoinList(currency));
+      setCoins(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching coins:", error.message);
+      setLoading(false);
+    }
   }, [currency]);
 
-  const handleSearch = () => {
-    return coins.filter((coin) => {
-      return (
-        coin.name.toLowerCase().includes(search) ||
-        coin.symbol.toLowerCase().includes(search)
-      );
-    }, useSortBy);
-  };
+  useEffect(() => {
+    fetchCoin();
+  }, [fetchCoin]);
+
+  useEffect(() => {
+    fetchCoins();
+  }, [fetchCoins]);
+
+  const filteredCoins = useMemo(() => {
+    return coins.filter(
+      (coin) =>
+        coin.name.toLowerCase().includes(search.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [coins, search]);
 
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
-        <Typography
-          variant="h3"
-          style={{ color: "skyblue", margin: 18, fontFamily: "bold" }}
-        >
+        <Typography variant="h3" className={classes.title}>
           CryptoCurrency Prices by Market Cap
         </Typography>
         <TextField
           label="Search"
           variant="outlined"
-          style={{ marginBottom: 22, width: "100%" }}
+          className={classes.textField}
           onChange={(e) => setSearch(e.target.value)}
         />
         <TableContainer component={Paper}>
@@ -113,16 +125,16 @@ const CoinsTable = () => {
             <Table aria-label="simple table">
               <TableHead style={{ backgroundColor: "skyblue" }}>
                 <TableRow>
-                  {["Rank", "Coin", "Price", "24 Change", "Market Cap"].map(
+                  {["Rank", "Coin", "Price", "24h Change", "Market Cap"].map(
                     (head) => (
                       <TableCell
                         style={{
                           color: "black",
                           fontWeight: "680",
-                          fontFamily: "Bold",
+                          fontFamily: "Montserrat",
                         }}
                         key={head}
-                        align={head === "Rank" ? " " : "left"}
+                        align={head === "Rank" ? "center" : "left"}
                       >
                         {head}
                       </TableCell>
@@ -131,7 +143,7 @@ const CoinsTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {handleSearch()
+                {filteredCoins
                   .slice((page - 1) * 30, (page - 1) * 30 + 30)
                   .map((row) => {
                     const profit = row.price_change_percentage_24h > 0;
@@ -141,30 +153,14 @@ const CoinsTable = () => {
                         className={classes.row}
                         key={row.name}
                       >
-                        <TableCell>
-                          <div className={classes.marketData}>
-                            <span style={{ display: "flex" }}>
-                              <Typography
-                                variant="h5"
-                                className={classes.heading}
-                                style={{
-                                  fontFamily: "Montserrat",
-                                  marginTop: 10,
-                                }}
-                              >
-                                {row.market_cap_rank}
-                              </Typography>
-                            </span>
-                          </div>
+                        <TableCell align="center">
+                          {row.market_cap_rank}
                         </TableCell>
                         <TableCell
                           align="left"
                           component="th"
                           scope="row"
-                          style={{
-                            display: "flex",
-                            gap: 10,
-                          }}
+                          style={{ display: "flex", gap: 10 }}
                         >
                           <img
                             src={row?.image}
@@ -172,16 +168,10 @@ const CoinsTable = () => {
                             height="50"
                             style={{ marginBottom: 10 }}
                           />
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
+                          <div>
                             <span
                               style={{
                                 textTransform: "uppercase",
-
                                 fontSize: 22,
                               }}
                             >
@@ -199,29 +189,15 @@ const CoinsTable = () => {
                         <TableCell
                           align="left"
                           style={{
-                            color: profit > 0 ? "green" : "red",
-                            fontWeight: 480,
+                            color: profit ? "green" : "red",
+                            fontWeight: 500,
                           }}
                         >
                           {profit && "+"}
                           {row.price_change_percentage_24h.toFixed(2)}%
                         </TableCell>
-                        {/* Not able to fetch 7d change from api
-                        <TableCell
-                          align="left"
-                          style={{
-                            color: profit > 0 ? "green" : "red",
-                            fontWeight: 480,
-                          }}
-                        >
-                          {profit && "+"}
-                          {row.price_change_percentage_24h.toFixed(2)}%{" "}
-                        </TableCell> */}
                         <TableCell align="left">
-                          {symbol}{" "}
-                          {numberWithCommas(
-                            row.market_cap.toFixed(0).toString()
-                          )}
+                          {symbol} {numberWithCommas(row.market_cap.toFixed(0))}
                         </TableCell>
                       </TableRow>
                     );
@@ -231,7 +207,7 @@ const CoinsTable = () => {
           )}
         </TableContainer>
         <Pagination
-          count={(handleSearch()?.length / 30).toFixed(0)}
+          count={Math.ceil(filteredCoins.length / 30)}
           style={{
             padding: 20,
             width: "100%",
@@ -243,13 +219,10 @@ const CoinsTable = () => {
             setPage(value);
             window.scroll(0, 450);
           }}
-        />{" "}
-        {/* <AboutUs /> */}
-        {/* <Footer /> */}
+        />
       </Container>
     </ThemeProvider>
   );
 };
-/* exported render */
 
 export default CoinsTable;
