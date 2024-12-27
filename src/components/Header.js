@@ -6,7 +6,7 @@ import {
   Select,
   Typography,
 } from "@material-ui/core";
-
+import logo from "./img/logo.png";
 import {
   createTheme,
   ThemeProvider,
@@ -47,9 +47,12 @@ function Header() {
               className={classes.title}
             >
               <img
-                style={{ width: "150px", marginTop: "10px" }}
-                src="../capture.PNG"
-                alt="capture"
+                style={{
+                  mixBlendMode: "multiply",
+                  width: "90px",
+                }}
+                src={logo}
+                alt="Logo"
               />
             </Typography>
 
