@@ -49,7 +49,8 @@ function Header() {
               <img
                 style={{
                   mixBlendMode: "multiply",
-                  width: "90px",
+                  width: "130px",
+                  height: "70px",
                 }}
                 src={logo}
                 alt="Logo"
